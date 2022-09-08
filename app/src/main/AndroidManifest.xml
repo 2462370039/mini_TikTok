@@ -2,8 +2,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.team8.mini_tiktok">
+    <!--    联网权限-->
+    <uses-permission android:name="android.permission.INTERNET "/>
+
+    <queries>
+        <!--允许查询抖音和抖音极速版的信息-->
+        <package android:name="com.ss.android.ugc.aweme" />
+        <package android:name="com.ss.android.ugc.aweme.lite" />
+    </queries>
+
+
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -22,6 +33,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".douyinapi.DouYinEntryActivity"
+            android:launchMode="singleTask"
+            android:taskAffinity="com.team8.mini_tiktok"
+            android:exported="true"
+            tools:ignore="MissingClass" />
     </application>
 
 </manifest>
