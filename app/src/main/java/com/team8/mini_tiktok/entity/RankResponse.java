@@ -42,33 +42,18 @@ public class RankResponse implements Serializable {
             return active_time;
         }
 
-        public void setActive_time(String active_time) {
-            this.active_time = active_time;
-        }
-
         public String getDescription() {
             return description;
-        }
-
-        public void setDescription(String description) {
-            this.description = description;
         }
 
         public String getError_code() {
             return error_code;
         }
 
-        public void setError_code(String error_code) {
-            this.error_code = error_code;
-        }
-
         public List<RankList> getRankList() {
             return rankList;
         }
 
-        public void setRankList(List<RankList> rankList) {
-            this.rankList = rankList;
-        }
 
     }
 
@@ -84,48 +69,24 @@ public class RankResponse implements Serializable {
             return description;
         }
 
-        public void setDescription(String description) {
-            this.description = description;
-        }
-
         public String getError_code() {
             return error_code;
-        }
-
-        public void setError_code(String error_code) {
-            this.error_code = error_code;
         }
 
         public String getLogid() {
             return logid;
         }
 
-        public void setLogid(String logid) {
-            this.logid = logid;
-        }
-
         public String getNow() {
             return now;
-        }
-
-        public void setNow(String now) {
-            this.now = now;
         }
 
         public String getSub_description() {
             return sub_description;
         }
 
-        public void setSub_description(String sub_description) {
-            this.sub_description = sub_description;
-        }
-
         public String getSub_error_code() {
             return sub_error_code;
-        }
-
-        public void setSub_error_code(String sub_error_code) {
-            this.sub_error_code = sub_error_code;
         }
     }
 }

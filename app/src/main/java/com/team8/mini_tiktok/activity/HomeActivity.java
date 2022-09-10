@@ -48,7 +48,7 @@ public class HomeActivity extends BaseActivity {
         access_token = getStringFromSP("access_token");
         //TODO:删除
 //        client_token = getStringFromSP("client_token");
-        client_token = "clt.ba22c55fdd2d43429ea5a8805af244b9Qo32BfdhSnE4uTXI9xssyPoJLpqg";
+        client_token = "clt.3e85c113597cfbe84d851db03c8af97el50lnAOehNKTDvNzdSKgvVsgHLTe";
         if (client_token == null || TextUtils.isEmpty(client_token)) {
             getClientToken();
             client_token = getStringFromSP("client_token");
