@@ -46,9 +46,9 @@ public class HomeActivity extends BaseActivity {
     protected void initDate() {
         //TODO:判断access_token是否过期
         access_token = getStringFromSP("access_token");
-        //TODO
+        //TODO:删除
 //        client_token = getStringFromSP("client_token");
-        client_token = "clt.a00bbfe25f1702ef2e99fd1e3f3f701auURv7175nZq2hhNhZcKTUNUL9VpY";
+        client_token = "clt.ba22c55fdd2d43429ea5a8805af244b9Qo32BfdhSnE4uTXI9xssyPoJLpqg";
         if (client_token == null || TextUtils.isEmpty(client_token)) {
             getClientToken();
             client_token = getStringFromSP("client_token");
