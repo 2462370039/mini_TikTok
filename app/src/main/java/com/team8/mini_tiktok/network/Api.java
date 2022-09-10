@@ -14,9 +14,13 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.BlockingDeque;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -66,27 +70,25 @@ public class Api {
     }
 
     /**
-     * post请求
-     * @param context 上下文,用来获取SharedPreferences
+     * post请求(传 x-www-form-urlencoded)
      * @param callBack 回调接口
      */
-    public void postRequest(Context context, final MyCallBack callBack){
-        SharedPreferences sp = context.getSharedPreferences( AppConfig.SP_FILE_NAME, Context.MODE_PRIVATE);
-        String token = sp.getString("token", "");
+    public void postRequest(String contentType, final MyCallBack callBack){
 
-        JSONObject jsonObject = new JSONObject(mParams);
-        String jsonStr = jsonObject.toString();
-        RequestBody requestBodyJson =
-                RequestBody.Companion.create(jsonStr, MediaType.parse("application/json;charset=utf-8"));
-                //RequestBody.create(MediaType.parse("application/json;charset=utf-8"), jsonStr);
+        FormBody.Builder builder = new FormBody.Builder();
+        for (Map.Entry<String, Object> entry : mParams.entrySet()){
+            builder.add(entry.getKey(), String.valueOf(entry.getValue()));
+        }
+
+        RequestBody requestBodyPost = builder.build();
 
         Request request = new Request.Builder()
                 .url(requestUrl)
-                .addHeader("contentType", "application/json;charset=utf-8")
-                .addHeader("token", token)
-                .post(requestBodyJson)
+                .addHeader("Content-Type", contentType)
+                .post(requestBodyPost)
                 .build();
 
+        Log.d("TZH", "postRequest: request=" + request);
         final Call call = client.newCall(request);
         call.enqueue(new Callback() {
             @Override
@@ -97,27 +99,24 @@ public class Api {
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                final String res = response.body().string();
+                final String res = Objects.requireNonNull(response.body()).string();
                 callBack.onSuccess(res);
             }
         });
     }
 
-    /**
-     * get请求
-     * @param context 上下文,用来获取SharedPreferences
-     * @param callBack 回调接口
-     */
-    public void getRequest(Context context, final MyCallBack callBack){
+
+    public void getRequest(String contentType, String token, final MyCallBack callBack){
         //获取token
-        SharedPreferences sp = context.getSharedPreferences(AppConfig.SP_FILE_NAME, Context.MODE_PRIVATE);
-        String token = sp.getString("access_token", "");
+//        SharedPreferences sp = context.getSharedPreferences(AppConfig.SP_FILE_NAME, Context.MODE_PRIVATE);
+//        String token = sp.getString("access_token", "");
         //拼接url
         String url = getUrlWithParams(requestUrl, mParams);
         Log.d(TAG, "getRequest: url=" + url);
         Request request = new Request.Builder()
                 .url(url)
-                .addHeader("access_token", token)
+                .addHeader("access-token", token)
+                .addHeader("Content-Type", contentType)
                 .get()
                 .build();
         final Call call = client.newCall(request);
@@ -130,7 +129,7 @@ public class Api {
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                final String res = response.body().string();
+                final String res = Objects.requireNonNull(response.body()).string();
                 Log.d(TAG, "onResponse: res=" + res);
                 callBack.onSuccess(res);
             }

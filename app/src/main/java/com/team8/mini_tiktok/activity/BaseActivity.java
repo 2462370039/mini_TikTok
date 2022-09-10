@@ -4,11 +4,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.gson.Gson;
 import com.team8.mini_tiktok.AppConfig;
+import com.team8.mini_tiktok.entity.GetClientTokenResponse;
+import com.team8.mini_tiktok.network.Api;
+import com.team8.mini_tiktok.network.ApiConfig;
+import com.team8.mini_tiktok.network.MyCallBack;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @introduction: Activity基类
@@ -16,6 +25,7 @@ import com.team8.mini_tiktok.AppConfig;
  * @time: 2022.09.08 13:40
  */
 public abstract class BaseActivity extends AppCompatActivity {
+    private static final String TAG = "TZH";
     public Context mContext;
 
     @Override
@@ -37,6 +47,21 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     public void navigateTo(Class activity){
         Intent intent = new Intent(mContext, activity);
+        startActivity(intent);
+    }
+
+    /**
+     * 跳转到activity
+     * @param activity  目标Activity
+     * @param params  传递的数据集
+     */
+    public void navigateToWithBundle(Class activity, Map<String, Object> params){
+        Intent intent = new Intent(mContext, activity);
+        Bundle bundle = new Bundle();
+        for (Map.Entry<String, Object> entry : params.entrySet()) {
+            bundle.putString(entry.getKey(), String.valueOf(entry.getValue()));
+        }
+        intent.putExtra("Args", bundle);
         startActivity(intent);
     }
 
@@ -73,4 +98,38 @@ public abstract class BaseActivity extends AppCompatActivity {
         editor.putString(key, val);
         editor.apply();
     }
+
+    protected void getClientToken(){
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("client_key", AppConfig.clientkey);
+        params.put("client_secret", AppConfig.clientSecret);
+        params.put("grand_type", ApiConfig.GRANT_TYPE_GET_CLT);
+
+
+        Api.config(ApiConfig.GET_CLIENT_TOKEN, params).postRequest("multipart/form-data", new MyCallBack() {
+            @Override
+            public void onSuccess(String res) {
+                Gson gson = new Gson();
+                GetClientTokenResponse clientTokenResponse = gson.fromJson(res, GetClientTokenResponse.class);
+                if ("success".equals(clientTokenResponse.getMessage())) {//响应成功
+                    Log.d(TAG, "onSuccess : get client_token --->  success");
+                    GetClientTokenResponse.DataBean data = clientTokenResponse.getData();
+                    String client_token = data.getAccess_token();
+                    //保存access_token
+                    SharedPreferences sp = getSharedPreferences(AppConfig.SP_FILE_NAME, MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.putString("client_token", client_token);
+                    editor.apply();
+                } else {
+                    Log.d(TAG, "onSuccess: get client_token ---> error_code:" + clientTokenResponse.getData().getError_code() + res);
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        });
+    }
+
 }

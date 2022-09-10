@@ -4,9 +4,16 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Myspace/githubProject/myProject/git_TT/mini_TikTok/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.3915" />
+        <entry key="..\:/Myspace/githubProject/myProject/git_TT/mini_TikTok/app/src/main/res/drawable/ic_hot_24.xml" value="0.2445" />
         <entry key="..\:/Myspace/githubProject/myProject/git_TT/mini_TikTok/app/src/main/res/drawable/ic_launcher_background.xml" value="0.3915" />
         <entry key="..\:/Myspace/githubProject/myProject/git_TT/mini_TikTok/app/src/main/res/drawable/login_background.xml" value="0.3915" />
+        <entry key="..\:/Myspace/githubProject/myProject/git_TT/mini_TikTok/app/src/main/res/layout/activity_home.xml" value="0.33016304347826086" />
         <entry key="..\:/Myspace/githubProject/myProject/git_TT/mini_TikTok/app/src/main/res/layout/activity_main.xml" value="0.41822916666666665" />
+        <entry key="..\:/Myspace/githubProject/myProject/git_TT/mini_TikTok/app/src/main/res/layout/activity_rank.xml" value="0.3500905797101449" />
+        <entry key="..\:/Myspace/githubProject/myProject/git_TT/mini_TikTok/app/src/main/res/layout/fragment_mine.xml" value="0.41822916666666665" />
+        <entry key="..\:/Myspace/githubProject/myProject/git_TT/mini_TikTok/app/src/main/res/layout/fragment_rank.xml" value="0.41822916666666665" />
+        <entry key="..\:/Myspace/githubProject/myProject/git_TT/mini_TikTok/app/src/main/res/layout/list_item_film.xml" value="0.5" />
+        <entry key="..\:/Myspace/githubProject/myProject/git_TT/mini_TikTok/app/src/main/res/layout/list_item_movie.xml" value="0.28940217391304346" />
         <entry key="..\:/Myspace/githubProject/myProject/mini_TikTok/app/src/main/res/layout/activity_main.xml" value="0.15260416666666668" />
       </map>
     </option>
