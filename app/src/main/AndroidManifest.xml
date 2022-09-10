@@ -2,17 +2,38 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.team8.mini_tiktok">
+    <!-- 联网权限 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <queries>
+
+        <!-- 允许查询抖音和抖音极速版的信息 -->
+        <package android:name="com.ss.android.ugc.aweme" />
+        <package android:name="com.ss.android.ugc.aweme.lite" />
+    </queries>
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Mini_TikTok"
         tools:targetApi="31">
+        <activity
+            android:name=".activity.RankActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.HomeActivity"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -22,6 +43,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".douyinapi.DouYinEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:taskAffinity="com.team8.mini_tiktok" />
     </application>
 
 </manifest>
