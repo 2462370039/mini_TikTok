@@ -71,11 +71,10 @@ public class DouYinEntryActivity extends Activity implements IApiEventHandler {
             Authorization.Response response = (Authorization.Response) resp;
             Intent intent = null;
             if (resp.isSuccess()) {
-                Toast.makeText(this, "授权成功，获得权限：" + response.grantedPermissions,
+                Toast.makeText(this, "授权成功",
                         Toast.LENGTH_SHORT).show();
-                Toast.makeText(this, "authCode:" + response.authCode, Toast.LENGTH_LONG).show();
                 //TODO:删除
-                Log.d("TZH", "onResp: authCode=" + response.authCode);
+                Log.d(TAG, "DouYinEntryActivity onResp: authCode=" + response.authCode);
                 getAccessToken(response.authCode);
             } else {
                 Toast.makeText(this, "授权失败", Toast.LENGTH_SHORT).show();
@@ -103,14 +102,15 @@ public class DouYinEntryActivity extends Activity implements IApiEventHandler {
                 Gson gson = new Gson();
                 GetAccessResponse accessResponse = gson.fromJson(res, GetAccessResponse.class);
                 if ("success".equals(accessResponse.getMessage())){//响应成功
-                    Log.d(TAG, "onSuccess : get access_token --->  success");
+                    Log.d(TAG, "DouYinEntryActivity onSuccess : get access_token --->  success");
                     GetAccessResponse.DataBean data = accessResponse.getData();
                     String access_token = data.getAccess_token();
                     String refresh_token = data.getRefresh_token();
-                    //TODO:删除
-                    Log.d("TZH", "onSuccess: access_token=" + access_token);
-                    Log.d("TZH", "onSuccess: refresh_token=" + refresh_token);
-                    Log.d("TZH", "onSuccess: response=" + res);
+
+                    //TODO:refresh_token处理
+                    Log.d("TZH", "DouYinEntryActivity onSuccess: access_token=" + access_token);
+                    Log.d("TZH", "DouYinEntryActivity onSuccess: refresh_token=" + refresh_token);
+                    Log.d("TZH", "DouYinEntryActivity onSuccess: response=" + res);
 
                     //保存access_token
                     SharedPreferences sp = getSharedPreferences(AppConfig.SP_FILE_NAME, MODE_PRIVATE);
@@ -119,9 +119,10 @@ public class DouYinEntryActivity extends Activity implements IApiEventHandler {
                     editor.apply();
 
                     Intent in = new Intent(DouYinEntryActivity.this, HomeActivity.class);
+                    in.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(in);
                 } else {
-                    Log.e(TAG, "onSuccess : get access_token --->  error_code:" + accessResponse.getData().getError_code());
+                    Log.e(TAG, "DouYinEntryActivity onSuccess : get access_token --->  error_code:" + accessResponse.getData().getError_code());
                 }
             }
 
@@ -131,7 +132,5 @@ public class DouYinEntryActivity extends Activity implements IApiEventHandler {
             }
         });
     }
-
-
 
 }

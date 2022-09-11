@@ -54,8 +54,8 @@ public class RankActivity extends BaseActivity {
         String access_token = bundle.getString("access-token");
         //TODO:if (access-token == "")
         //TODO:删除
-        Log.d("TZH", "onCreate: type=" + type);
-        Log.d("TZH", "onCreate: access_token=" + access_token);
+        Log.d("TZH", "RankActivity onCreate: type=" + type);
+        Log.d("TZH", "RankActivity onCreate: access_token=" + access_token);
 
         HashMap<String, Object> params = new HashMap<>();
         params.put("type", type);

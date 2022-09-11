@@ -125,25 +125,25 @@ public abstract class BaseActivity extends AppCompatActivity {
         HashMap<String, Object> params = new HashMap<>();
         params.put("client_key", AppConfig.clientkey);
         params.put("client_secret", AppConfig.clientSecret);
-        params.put("grand_type", ApiConfig.GRANT_TYPE_GET_CLT);
+        params.put("grant_type", ApiConfig.GRANT_TYPE_GET_CLT);
 
-
-        Api.config(ApiConfig.GET_CLIENT_TOKEN, params).postRequest("multipart/form-data", new MyCallBack() {
+        Api.config(ApiConfig.GET_CLIENT_TOKEN, params).postRequest("multipart/form-data;charset=utf-8", new MyCallBack() {
             @Override
             public void onSuccess(String res) {
+                String client_token;
                 Gson gson = new Gson();
                 GetClientTokenResponse clientTokenResponse = gson.fromJson(res, GetClientTokenResponse.class);
                 if ("success".equals(clientTokenResponse.getMessage())) {//响应成功
-                    Log.d(TAG, "onSuccess : get client_token --->  success");
+                    Log.d("TZH", "onSuccess : get client_token --->  success");
                     GetClientTokenResponse.DataBean data = clientTokenResponse.getData();
-                    String client_token = data.getAccess_token();
+                    client_token = data.getAccess_token();
                     //保存access_token
                     SharedPreferences sp = getSharedPreferences(AppConfig.SP_FILE_NAME, MODE_PRIVATE);
                     SharedPreferences.Editor editor = sp.edit();
                     editor.putString("client_token", client_token);
                     editor.apply();
                 } else {
-                    Log.d(TAG, "onSuccess: get client_token ---> error_code:" + clientTokenResponse.getData().getError_code() + res);
+                    Log.d("TZH", "onSuccess: get client_token ---> error_code:" + clientTokenResponse.getData().getError_code());
                 }
             }
 
@@ -152,6 +152,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
             }
         });
+
     }
 
 }
