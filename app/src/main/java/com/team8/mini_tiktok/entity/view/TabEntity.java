@@ -3,7 +3,7 @@ package com.team8.mini_tiktok.entity.view;
 import com.flyco.tablayout.listener.CustomTabEntity;
 
 /**
- * @introduction:
+ * @introduction: 主页底部菜单项实体类
  * @author: T19
  * @time: 2022.09.09 18:29
  */

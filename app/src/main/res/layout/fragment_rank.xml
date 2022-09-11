@@ -6,6 +6,7 @@
     tools:context=".fragment.RankFragment">
 
     <LinearLayout
+        android:layout_marginTop="30dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -14,18 +15,24 @@
             android:id="@+id/btn_rank_film"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
             android:layout_marginTop="10dp"
             android:background="@mipmap/ic_film"/>
         <ImageButton
             android:id="@+id/btn_rank_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
             android:layout_marginTop="10dp"
             android:background="@mipmap/ic_tv"/>
         <ImageButton
             android:id="@+id/btn_rank_variety"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
             android:layout_marginTop="10dp"
             android:background="@mipmap/ic_variety"/>
     </LinearLayout>

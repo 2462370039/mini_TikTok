@@ -21,9 +21,9 @@ import java.util.List;
  * @time: 2022.09.10 14:40
  */
 public class RankListAdapter extends BaseAdapter {
-
-    private List<RankList> mData;
+    //当前Activity
     private Context mContext;
+    private List<RankList> mData;
 
     //list item 类型标志
     public static final int TYPE_FILM = 1;
@@ -70,6 +70,8 @@ public class RankListAdapter extends BaseAdapter {
         return 4;
     }
 
+
+
     @SuppressLint("ViewHolder")
     @Override
     public View getView(int i, View itemView, ViewGroup viewGroup) {
@@ -79,7 +81,8 @@ public class RankListAdapter extends BaseAdapter {
         ViewHolderFilm holderFilm = null;
         ViewHolderTv holderTv = null;
         ViewHolderVariety holderVariety = null;
-////        ViewHolderItem viewHolderItem = null;
+
+        //TODO:优化
         if (itemView == null){//首次需加载xml布局
             switch (type) {
                 case TYPE_FILM:
@@ -190,7 +193,6 @@ public class RankListAdapter extends BaseAdapter {
         }
 
         public ViewHolderFilm(View itemView){
-
         }
     }
     public class ViewHolderTv extends ViewHolderItem{
