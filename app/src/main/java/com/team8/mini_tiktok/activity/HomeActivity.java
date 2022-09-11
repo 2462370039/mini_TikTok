@@ -1,5 +1,6 @@
 package com.team8.mini_tiktok.activity;
 
+import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -9,13 +10,20 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;
+import com.google.gson.Gson;
+import com.team8.mini_tiktok.AppConfig;
 import com.team8.mini_tiktok.R;
 import com.team8.mini_tiktok.adapter.ViewPagerAdapter;
+import com.team8.mini_tiktok.entity.GetClientTokenResponse;
 import com.team8.mini_tiktok.entity.view.TabEntity;
 import com.team8.mini_tiktok.fragment.MineFragment;
 import com.team8.mini_tiktok.fragment.RankFragment;
+import com.team8.mini_tiktok.network.Api;
+import com.team8.mini_tiktok.network.ApiConfig;
+import com.team8.mini_tiktok.network.MyCallBack;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class HomeActivity extends BaseActivity {
     private String access_token;
@@ -46,13 +54,16 @@ public class HomeActivity extends BaseActivity {
     protected void initDate() {
         //TODO:判断access_token是否过期
         access_token = getStringFromSP("access_token");
-        //TODO:删除
-//        client_token = getStringFromSP("client_token");
-        client_token = "clt.3e85c113597cfbe84d851db03c8af97el50lnAOehNKTDvNzdSKgvVsgHLTe";
-        if (client_token == null || TextUtils.isEmpty(client_token)) {
-            getClientToken();
-            client_token = getStringFromSP("client_token");
-        }
+
+        //同步请求client_token
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                getClientToken();
+            }
+        }).start();
+        client_token = getStringFromSP("client_token");
+
         Log.d("TZH", "HomeActivity initDate: client_token=" + client_token);
 
         mFragments.add(RankFragment.newInstance(client_token));
@@ -95,5 +106,38 @@ public class HomeActivity extends BaseActivity {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), getLifecycle(), mTitles, mFragments);
         viewPager.setAdapter(adapter);
 
+    }
+
+    protected void getClientToken(){
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("client_key", AppConfig.clientkey);
+        params.put("client_secret", AppConfig.clientSecret);
+        params.put("grant_type", ApiConfig.GRANT_TYPE_GET_CLT);
+
+        Api.config(ApiConfig.GET_CLIENT_TOKEN, params).postRequest("multipart/form-data;charset=utf-8", new MyCallBack() {
+            @Override
+            public void onSuccess(String res) {
+                String client_token;
+                Gson gson = new Gson();
+                GetClientTokenResponse clientTokenResponse = gson.fromJson(res, GetClientTokenResponse.class);
+                if ("success".equals(clientTokenResponse.getMessage())) {//响应成功
+                    Log.d("TZH", "onSuccess : get client_token --->  success");
+                    GetClientTokenResponse.DataBean data = clientTokenResponse.getData();
+                    client_token = data.getAccess_token();
+                    //保存access_token
+                    SharedPreferences sp = getSharedPreferences(AppConfig.SP_FILE_NAME, MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.putString("client_token", client_token);
+                    editor.apply();
+                } else {
+                    Log.d("TZH", "onSuccess: get client_token ---> error_code:" + clientTokenResponse.getData().getError_code());
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        });
     }
 }

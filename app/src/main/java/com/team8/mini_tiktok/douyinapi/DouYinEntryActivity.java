@@ -97,44 +97,6 @@ public class DouYinEntryActivity extends Activity implements IApiEventHandler {
         params.put("grant_type", ApiConfig.GRANT_TYPE_GET_ACT);
         params.put("client_key", AppConfig.clientkey);
 
-        /*未封装
-        //FormBody formBody = new FormBody.Builder().build();
-        OkHttpClient client = new OkHttpClient();
-        FormBody.Builder builder = new FormBody.Builder();
-        builder.add("client_secret", AppConfig.clientSecret);
-        builder.add("code", authCode);
-        builder.add("grant_type", ApiConfig.GRANT_TYPE);
-        builder.add("client_key", AppConfig.clientkey);
-        RequestBody requestBody = builder.build();
-        Request request = new Request.Builder()
-                .url(ApiConfig.SERVER_ADDRESS + ApiConfig.GET_ACCESS_TOKEN)
-                .addHeader("contentType", "application/x-www-form-urlencoded")
-                .post(requestBody)
-                .build();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                Log.e("TAG", "onFailure: ", e);
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                String res = response.body().string();
-                Log.d("TAG", "onResponse: res=" + res);
-                Gson gson = new Gson();
-                GetAccessResponse accessResponse = gson.fromJson(res, GetAccessResponse.class);
-                if ("success".equals(accessResponse.getMessage())){
-                    GetAccessResponse.DataBean dataBean = accessResponse.getData();
-                    Log.d("TAG", "onResponse: token=" + dataBean.getAccess_token());
-                }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(DouYinEntryActivity.this, "获取到token", Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
-        });*/
         Api.config(ApiConfig.GET_ACCESS_TOKEN, params).postRequest( "application/x-www-form-urlencoded", new MyCallBack() {
             @Override
             public void onSuccess(String res) {
@@ -145,7 +107,7 @@ public class DouYinEntryActivity extends Activity implements IApiEventHandler {
                     GetAccessResponse.DataBean data = accessResponse.getData();
                     String access_token = data.getAccess_token();
                     String refresh_token = data.getRefresh_token();
-                    //TODO:delete
+                    //TODO:删除
                     Log.d("TZH", "onSuccess: access_token=" + access_token);
                     Log.d("TZH", "onSuccess: refresh_token=" + refresh_token);
                     Log.d("TZH", "onSuccess: response=" + res);
@@ -155,9 +117,6 @@ public class DouYinEntryActivity extends Activity implements IApiEventHandler {
                     SharedPreferences.Editor editor = sp.edit();
                     editor.putString("access_token", access_token);
                     editor.apply();
-
-                    //获取client_access
-                    getClientToken();
 
                     Intent in = new Intent(DouYinEntryActivity.this, HomeActivity.class);
                     startActivity(in);
@@ -173,93 +132,6 @@ public class DouYinEntryActivity extends Activity implements IApiEventHandler {
         });
     }
 
-    private void getClientToken(){
-        HashMap<String, Object> params = new HashMap<>();
-        params.put("client_key", AppConfig.clientkey);
-        params.put("client_secret", AppConfig.clientSecret);
-        params.put("grant_type", ApiConfig.GRANT_TYPE_GET_CLT);
 
-
-        //未封装
-        /*RequestBody requestBody = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("client_key", "awbdn4d2ldjf16de")
-                .addFormDataPart("client_secret", "3109788557d63054134")
-                .addFormDataPart("grant_type", "client_credential")
-                .build();
-
-        Request request = new Request.Builder()
-                .url("https://open.douyin.com/oauth/client_token/")
-                .addHeader("Content-Type", "multipart/form-data")
-                .post(requestBody)
-                .build();*/
-        /*FormBody.Builder builder = new FormBody.Builder();
-        for (Map.Entry<String, Object> entry : params.entrySet()){
-            builder.add(entry.getKey(), String.valueOf(entry.getValue()));
-        }
-
-        RequestBody requestBodyPost = builder.build();
-
-        Request request = new Request.Builder()
-                .url("https://open.douyin.com/oauth/client_token/")
-                .addHeader("Content-Type", contentType)
-                .post(requestBodyPost)
-                .build();
-
-        Log.d("TZH", "postRequest: request" + request+ "body" + requestBody);
-        OkHttpClient client = new OkHttpClient();
-        final Call call = client.newCall(request);
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                Log.e(TAG, "onFailure: " + e.getMessage());
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                final String res = Objects.requireNonNull(response.body()).string();
-                String client_token;
-                Gson gson = new Gson();
-                GetClientTokenResponse clientTokenResponse = gson.fromJson(res, GetClientTokenResponse.class);
-                if ("success".equals(clientTokenResponse.getMessage())) {//响应成功
-                    Log.d(TAG, "onSuccess : get client_token --->  success");
-                    GetClientTokenResponse.DataBean data = clientTokenResponse.getData();
-                    client_token = data.getAccess_token();
-                    //保存access_token
-                    SharedPreferences sp = getSharedPreferences(AppConfig.SP_FILE_NAME, MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sp.edit();
-                    editor.putString("client_token", client_token);
-                    editor.apply();
-                } else {
-                    Log.d(TAG, "onSuccess: get client_token ---> error_code:" + clientTokenResponse.getData().getError_code());
-                }
-            }
-        });*/
-        Api.config(ApiConfig.GET_CLIENT_TOKEN, params).postRequest("multipart/form-data;charset=utf-8", new MyCallBack() {
-            @Override
-            public void onSuccess(String res) {
-                String client_token;
-                Gson gson = new Gson();
-                GetClientTokenResponse clientTokenResponse = gson.fromJson(res, GetClientTokenResponse.class);
-                if ("success".equals(clientTokenResponse.getMessage())) {//响应成功
-                    Log.d(TAG, "onSuccess : get client_token --->  success");
-                    GetClientTokenResponse.DataBean data = clientTokenResponse.getData();
-                    client_token = data.getAccess_token();
-                    //保存access_token
-                    SharedPreferences sp = getSharedPreferences(AppConfig.SP_FILE_NAME, MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sp.edit();
-                    editor.putString("client_token", client_token);
-                    editor.apply();
-                } else {
-                    Log.d(TAG, "onSuccess: get client_token ---> error_code:" + clientTokenResponse.getData().getError_code());
-                }
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-
-            }
-        });
-    }
 
 }

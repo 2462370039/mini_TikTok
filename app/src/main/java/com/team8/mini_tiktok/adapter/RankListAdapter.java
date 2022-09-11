@@ -22,8 +22,9 @@ import java.util.List;
  */
 public class RankListAdapter extends BaseAdapter {
 
-    private List<RankList> mData;
+    //当前Activity
     private Context mContext;
+    private List<RankList> mData;
 
     //list item 类型标志
     public static final int TYPE_FILM = 1;
@@ -79,7 +80,8 @@ public class RankListAdapter extends BaseAdapter {
         ViewHolderFilm holderFilm = null;
         ViewHolderTv holderTv = null;
         ViewHolderVariety holderVariety = null;
-////        ViewHolderItem viewHolderItem = null;
+
+        //TODO：使用RecycleView优化
         if (itemView == null){//首次需加载xml布局
             switch (type) {
                 case TYPE_FILM:
