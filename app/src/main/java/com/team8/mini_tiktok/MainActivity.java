@@ -31,8 +31,8 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initDate() {
-        //TODO: 判断token，保存登录状态
         getClientToken();
+        //TODO: 判断token，保存登录状态
         String access_token = getStringFromSP("access_token");
         if (access_token != null && !TextUtils.isEmpty(access_token)) { //存在access_token,调转到HomeActivity
             Log.d("TZH", "MainActivity initDate: access_token=" + access_token);
@@ -46,13 +46,6 @@ public class MainActivity extends BaseActivity {
                 sendAuth();
             }
         });
-    }
-
-    /**
-     *
-     */
-    private String getCode(){
-        return "";
     }
 
     private boolean sendAuth() {
